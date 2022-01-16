@@ -1,0 +1,111 @@
+Factory Details:
+  Rank                     none (0)
+  Long-name                Multi-File Sink
+  Klass                    Sink/File
+  Description              Write buffers to a sequentially named set of files
+  Author                   David Schleef <ds@schleef.org>
+
+Plugin Details:
+  Name                     multifile
+  Description              Reads/Writes buffers from/to sequentially named files
+  Filename                 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/libgstmultifile.so
+  Version                  1.16.2
+  License                  LGPL
+  Source module            gst-plugins-good
+  Source release date      2019-12-03
+  Binary package           GStreamer Good Plugins (Ubuntu)
+  Origin URL               https://launchpad.net/distros/ubuntu/+source/gst-plugins-good1.0
+
+GObject
+ +----GInitiallyUnowned
+       +----GstObject
+             +----GstElement
+                   +----GstBaseSink
+                         +----GstMultiFileSink
+
+Pad Templates:
+  SINK template: 'sink'
+    Availability: Always
+    Capabilities:
+      ANY
+
+Element has no clocking capabilities.
+Element has no URI handling capabilities.
+
+Pads:
+  SINK: 'sink'
+    Pad Template: 'sink'
+
+Element Properties:
+  aggregate-gops      : Whether to aggregate GOPs and process them as a whole without splitting
+                        flags: readable, writable
+                        Boolean. Default: false
+  async               : Go asynchronously to PAUSED
+                        flags: readable, writable
+                        Boolean. Default: true
+  blocksize           : Size in bytes to pull per buffer (0 = default)
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 4096 
+  enable-last-sample  : Enable the last-sample property
+                        flags: readable, writable
+                        Boolean. Default: true
+  index               : Index to use with location property to create file names.  The index is incremented by one for each buffer written.
+                        flags: readable, writable
+                        Integer. Range: 0 - 2147483647 Default: 0 
+  last-sample         : The last sample received in the sink
+                        flags: readable
+                        Boxed pointer of type "GstSample"
+  location            : Location of the file to write
+                        flags: readable, writable
+                        String. Default: "%05d"
+  max-bitrate         : The maximum bits per second to render (0 = disabled)
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+  max-file-duration   : Maximum file duration before starting a new file in max-size mode (in nanoseconds)
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 18446744073709551615 
+  max-file-size       : Maximum file size before starting a new file in max-size mode
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 2147483648 
+  max-files           : Maximum number of files to keep on disk. Once the maximum is reached,old files start to be deleted to make room for new ones.
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 0 
+  max-lateness        : Maximum number of nanoseconds that a buffer can be late before it is dropped (-1 unlimited)
+                        flags: readable, writable
+                        Integer64. Range: -1 - 9223372036854775807 Default: -1 
+  name                : The name of the object
+                        flags: readable, writable
+                        String. Default: "multifilesink0"
+  next-file           : When to start a new file
+                        flags: readable, writable
+                        Enum "GstMultiFileSinkNext" Default: 0, "buffer"
+                           (0): buffer           - New file for each buffer
+                           (1): discont          - New file after each discontinuity
+                           (2): key-frame        - New file at each key frame (Useful for MPEG-TS segmenting)
+                           (3): key-unit-event   - New file after a force key unit event
+                           (4): max-size         - New file when the configured maximum file size would be exceeded with the next buffer or buffer list
+                           (5): max-duration     - New file when the configured maximum file duration would be exceeded with the next buffer or buffer list
+  parent              : The parent of the object
+                        flags: readable, writable
+                        Object of type "GstObject"
+  post-messages       : Post a message for each file with information of the buffer
+                        flags: readable, writable
+                        Boolean. Default: false
+  processing-deadline : Maximum processing deadline in nanoseconds
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 20000000 
+  qos                 : Generate Quality-of-Service events upstream
+                        flags: readable, writable
+                        Boolean. Default: false
+  render-delay        : Additional render delay of the sink in nanoseconds
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+  sync                : Sync on the clock
+                        flags: readable, writable
+                        Boolean. Default: false
+  throttle-time       : The time to keep between rendered buffers (0 = disabled)
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+  ts-offset           : Timestamp offset in nanoseconds
+                        flags: readable, writable
+                        Integer64. Range: -9223372036854775808 - 9223372036854775807 Default: 0 

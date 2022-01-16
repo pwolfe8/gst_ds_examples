@@ -58,3 +58,4 @@ services:
 #### create volumes here ####
 # volumes:
 #   root:
+#   /opt/nvidia/deepstream/deepstream-6.0/samples/models/
