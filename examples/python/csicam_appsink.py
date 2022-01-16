@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# import cv2
+import cv2
 import gi
 import numpy as np
 
@@ -26,14 +26,20 @@ class GstVideo():
         self._frame = None
 
         # video source element
-        video_source = f'nvarguscamerasrc device=/dev/video{self.devnum}'
+        video_source = f'nvarguscamerasrc'
         
         # input video capabilities choice
         # choose a combo from the v4l2-ctl --list-formats-ext output for your cam. you'll probably need to replace the framerate/resolution at least to a valid option
-        input_caps = '! video/x-raw(memory:NVMM), width=1280, height=720, format=(string)NV12, framerate=(fraction)10/1 '
+        # input_caps = '! video/x-raw(memory:NVMM), width=1280, height=720, format=(string)NV12, framerate=(fraction)10/1 '
+        # input_caps = '! video/x-raw(memory:NVMM), width=3264, height=2464, format=(string)NV12, framerate=(fraction)21/1 '
+        # input_caps = '! video/x-raw(memory:NVMM), width=1920, height=1080, format=(string)NV12, framerate=(fraction)30/1 '
+        input_caps = '! video/x-raw(memory:NVMM),width=3264,height=1848,format=NV12,framerate=28/1 '
+        
 
         # video convert to desired raw frame video format (RGB in this case)
         videoconv = '! videoconvert ! video/x-raw, format=(string)RGB ! videoconvert'
+        videoconv2 = '! videoconvert ! video/x-raw, format=(string)RGB'
+        nvvideoconv = '! nvvidconv ! video/x-raw, format=(string)RGBA ! videoconvert ! video/x-raw,format=RGB'
         
         # appsink config
         appsink_config = '! appsink emit-signals=true sync=false max-buffers=2 drop=true'
@@ -45,7 +51,7 @@ class GstVideo():
         self.video_pipe = None
         
         # assemble pipeline list (connected to appsink at end)
-        pipeline_list = [video_source, input_caps, videoconv, appsink_config]
+        pipeline_list = [video_source, input_caps, nvvideoconv, appsink_config]
         self.run(pipeline_list)
 
     def start_gst(self, config=None):
@@ -146,7 +152,7 @@ if __name__ == '__main__':
         frame = video.frame()
         
         ## do stuff here... example opencv show frame
-        print(frame.shape)
-        # cv2.imshow('frame', frame)
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        #     break
+        # print(frame.shape)
+        cv2.imshow('frame', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break

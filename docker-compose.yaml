@@ -36,17 +36,18 @@ services:
       - ~/.ssh:/root/.ssh:ro # ssh folder from linux host
 
       ## device mappings ##
-      # - /dev/video0:/dev/video0 # for camera on video0 for example
+      - /dev/video0:/dev/video0 # for camera on video0 for example
+      - /tmp/argus_socket:/tmp/argus_socket # map the argus_socket for csi cameras using nvarguscamerasrc
 
     #### environmental variables to set inside the container ####
     # environment:
-    #   ARCH: ${ARCH_IN}
-    #   PATH_ADD: /opt/nvidia/deepstream/deepstream-6.0/bin # you can append this to bashrc using dockerfile
     #   - DISPLAY=$DISPLAY
+    #   PATH_ADD: /opt/nvidia/deepstream/deepstream-6.0/bin # you can append this to bashrc using dockerfile
+      
     
     #### priveleged gains access to all devices on host ####
-    # good for running docker inside docker if you need
-    # privileged: true
+    # good for running docker inside docker if you need. also owning devices like /dev/video0
+    privileged: true 
 
     #### configure docker network mode ####
     network_mode: "host" # uses host network stack
