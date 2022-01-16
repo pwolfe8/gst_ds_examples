@@ -1,0 +1,60 @@
+version: "3.9"
+services:
+
+  ###### name service ######
+  # (note: you can create multiple)
+  gstdocker_service:
+
+    #### name image  & container ####
+    image: pwolfe854/${CONTAINER_NAME}:${ARCH}_${NOGPU}
+    container_name: ${CONTAINER_NAME}
+
+    #### command to keep container alive ####
+    command: tail -F anything 
+
+    #### build Dockerfile and pass build args ####
+    build:
+      context: .
+      dockerfile: Dockerfile_${ARCH}
+      args:
+        FROM_IMG: ${FROM_IMG}
+        ARCH: ${ARCH}
+        GPU_ARG: ${GPU_ARG}
+
+    #### volumes and mappings ####
+    volumes:
+      ## volumes ##
+      # - root:/root/
+      # - consider adding the .engine models here after conversion for saving time on launch
+
+      ## mappings ##
+      - /tmp/.X11-unix/:/tmp/.X11-unix # x11
+      - ./:/root/gitfoldermap # git folder map
+      - ~/.ssh:/root/.ssh:ro # ssh folder from linux host
+
+      ## device mappings ##
+      # - /dev/video0:/dev/video0 # for camera on video0 for example
+
+    #### environmental variables to set inside the container ####
+    # environment:
+    #   ARCH: ${ARCH_IN}
+    #   PATH_ADD: /opt/nvidia/deepstream/deepstream-6.0/bin # you can append this to bashrc using dockerfile
+    #   - DISPLAY=$DISPLAY
+    
+    #### priveleged gains access to all devices on host ####
+    # good for running docker inside docker if you need
+    # privileged: true
+
+    #### configure docker network mode ####
+    network_mode: "host" # uses host network stack
+    
+    #### runtime libraries ####
+    # (like "nvidia" for docker gpu passthrough assuming nvidia-docker2 is installed on host)
+    runtime: ${GPU_ARG}
+    
+    #### container directory to start in ####
+    working_dir: ${WORKDIR}
+    
+#### create volumes here ####
+# volumes:
+#   root:

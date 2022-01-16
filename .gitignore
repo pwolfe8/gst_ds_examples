@@ -1,0 +1,3 @@
+# docker compose .env and .containername files built by build.sh
+.env
+.containername
