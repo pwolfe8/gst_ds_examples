@@ -15,11 +15,14 @@ services:
     #### build Dockerfile and pass build args ####
     build:
       context: .
-      dockerfile: Dockerfile_${ARCH}
+      dockerfile: Dockerfile
       args:
         FROM_IMG: ${FROM_IMG}
-        ARCH: ${ARCH}
         GPU_ARG: ${GPU_ARG}
+        POSE_REPO: https://github.com/pwolfe8/deepstream_pose_estimation
+        POSE_REPO_SSH: git@github.com:pwolfe8/deepstream_pose_estimation.git
+        POSE_REPO_FOLDER_NAME: deepstream_pose_estimation
+        SSH_DEV: ${SSH_DEV}
 
     #### volumes and mappings ####
     volumes:
@@ -29,7 +32,7 @@ services:
 
       ## mappings ##
       - /tmp/.X11-unix/:/tmp/.X11-unix # x11
-      - ./:/root/gitfoldermap # git folder map
+      - ./:${WORKDIR}/gitfoldermap # git folder map
       - ~/.ssh:/root/.ssh:ro # ssh folder from linux host
 
       ## device mappings ##
