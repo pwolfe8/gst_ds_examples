@@ -46,3 +46,9 @@ if [ $ARCH == x86_64 ]; then
   echo "proceeding to install nvidia-docker2 package..."
   ./desktop_scripts/install_nvidia-docker2_desktop.sh
 fi
+
+# while you can attach the current window it's best to reboot
+# so that your user is part of the "docker" group for all future opened terminals
+echo "Finished first time setup script"
+echo "Please reboot your machine to finish setup" 
+echo ""

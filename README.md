@@ -3,6 +3,8 @@ My gstreamer and deepstream examples container based on my dockerhub image gst_d
 
 
 ## Install Prereqs on Host
+  
+- Note: you may have to reboot a few times
 
 ### Jetson
 First ensure you're on L4T 32.6.X (`cat /etc/nv_tegra_release` and check REVISION for 6.0 or greater).  
@@ -12,41 +14,49 @@ Then run
 ```bash
 cd host_setup
 ./first_time_setup.sh
+# reboot afterwards
 ```
 
 ### Desktop
 Assuming you have a Ubuntu 20.04 Desktop (or 18.04 probably) with an NVIDIA GPU.
-Install the recommended nvidia drivers for you GPU using 
-```
-./host_setup/desktop_scripts/install_nvidia_drivers_desktop.sh
-```
 
-Then reboot your machine with `sudo reboot`
+Install the recommended nvidia drivers for you GPU using 
+```bash
+./host_setup/desktop_scripts/install_nvidia_drivers_desktop.sh
+# reboot afterwards 
+sudo reboot
+```
 
 Now run the first time setup script:
 ```bash
 cd host_setup
 ./first_time_setup.sh
+# reboot afterwards 
+sudo reboot
 ```
 
 ## Using the Container
 ```bash
-# automatically detect host architecture and if nvidia-docker2 packages is installed
-# if you want to override you can do 
-#   `./build.sh jetson_nogpu`  for example (other options: jetson, desktop, desktop_nogpu)
+# automatically detect host architecture and nvidia-docker2 package installation
+# manual override options:
+#   ./build.sh jetson_nogpu  # for example
+#    other options: jetson, desktop, desktop_nogpu
+# automatic is best for most users:
 ./build.sh
 
 # start the container
 ./run.sh
 
-# attach current shell to container. you can also right click container in the docker extension and attach shell or another vscode window
+# attach current shell to container.
+# you can also install vscode docker extension 
+#   then click on extension, right click container and attach vscode window
 ./attach.sh
 
 # for cleanup you can remove it with
 ./remove.sh
 
-# forgot to map /dev/video0 into the container in the docker-compose.yaml? No problem just change it there
-# then run
+# forgot to map /dev/video0 into the container in the docker-compose.yaml? 
+# No problem just make changes in the file then run 
 ./deleteRebuildRestart.sh 
 # and attach again however you like
 ```
