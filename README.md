@@ -1,7 +1,6 @@
-# gst_ds_env
-My gstreamer deepstream container image setup repo.
+# Gstreamer Deepstream Examples
+My gstreamer and deepstream examples container based on my dockerhub image gst_ds_env
 
-If you're wanting to use this go to https://github.com/pwolfe8/gst_ds_examples
 
 ## Install Prereqs on Host
 
