@@ -1,3 +1,11 @@
 # docker compose .env and .containername files built by build.sh
 .env
 .containername
+
+# output media files
+*.mp4
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.dot

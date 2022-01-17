@@ -64,7 +64,7 @@ sudo reboot
 ## Docker Options
 
 ### Use Local Display
-If you're plugged into the device via HDMI and want to display locally then run 
+If you're plugged into the device via HDMI and want to display locally then run on your host:
 
 `xhost +local:docker`
 
