@@ -5,15 +5,29 @@ My gstreamer and deepstream examples container based on my dockerhub image gst_d
 ## Install Prereqs on Host
 
 ### Jetson
-run the `./host_setup/first_time_setup.sh` script
+First ensure you're on L4T 32.6.X (`cat /etc/nv_tegra_release` and check REVISION for 6.0 or greater).  
+
+Then run 
+
+```bash
+cd host_setup
+./first_time_setup.sh
+```
 
 ### Desktop
 Assuming you have a Ubuntu 20.04 Desktop (or 18.04 probably) with an NVIDIA GPU.
-Install the recommended nvidia drivers for you GPU using `./host_setup/desktop_scripts/install_nvidia_drivers_desktop.sh` 
+Install the recommended nvidia drivers for you GPU using 
+```
+./host_setup/desktop_scripts/install_nvidia_drivers_desktop.sh
+```
 
 Then reboot your machine with `sudo reboot`
 
-Now run the `./host_setup/first_time_setup.sh` script
+Now run the first time setup script:
+```bash
+cd host_setup
+./first_time_setup.sh
+```
 
 ## Using the Container
 ```bash
