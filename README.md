@@ -48,6 +48,8 @@ If you're plugged into the device via HDMI and want to display locally then run
 and make sure the container has the same DISPLAY environment variable as your local host
 (i.e. `echo $DISPLAY` on your local host. then in your container set it to the same with `export DISPLAY=WhateverTheFuckCameOutOfYourLocalHost`)
 
+You can now test this out by typing xeyes in the docker container. ( you should see graphics of eyes that follow your mouse now )
+
 ## Using /dev/video0 
 in the docker-compose.yaml under `volumes` make sure to have these uncommented:
  - `- /dev/video0:/dev/video0`
@@ -66,10 +68,21 @@ now run `./deleteRebuildRestart.sh`
 If you have `nvidia-docker2` package and GPU installed on your host you should be able to access these examples under 
 - `/opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/`
 
-in addition to the `examples` folder here, 
-
-C Examples: 
+### C Examples: 
 - `/opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/`
 
-Python Exmaples: 
+### Python Exmaples: 
 - `/opt/nvidia/deepstream/deepstream-6.0/sources/sources/deepstream_python_apps/apps/`
+
+###  Building Other Deepstream in container (Pose Estimation)
+
+First follow the instructions from the "Use Local Display" section above.
+Now in the container go to 
+
+`/opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/deepstream_pose_estimation` 
+
+and run
+
+`./run.sh`  
+
+(ctrl+c to quit)

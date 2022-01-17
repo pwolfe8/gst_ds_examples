@@ -30,3 +30,4 @@ RUN \
   else \ 
     echo "not gpu container. skipping deepstream pose example..."; \
   fi;
+RUN apt update && apt install -y graphviz
