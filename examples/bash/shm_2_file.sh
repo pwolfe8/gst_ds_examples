@@ -10,7 +10,7 @@ SHM_FPS=${2:-20}
 SHM_CAPS="video/x-raw,format=RGB,width=1920,height=1080,framerate=$SHM_FPS/1"
 
 # setup debug directory for pipeline graphs
-ENABLE_DEBUG_GRAPH=true
+ENABLE_DEBUG_GRAPH=false
 DEBUG_TEMP_DIR=./debug_graphs_shm2file
 rm -r $DEBUG_TEMP_DIR
 mkdir -p $DEBUG_TEMP_DIR
