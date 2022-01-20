@@ -47,6 +47,9 @@ if [ $ARCH == x86_64 ]; then
   ./desktop_scripts/install_nvidia-docker2_desktop.sh
 fi
 
+# install dot2graph helper script in /usr/local/bin so accessible everywhere
+sudo cp helper_scripts/dot2graph.sh /usr/local/bin/dot2graph
+
 # while you can attach the current window it's best to reboot
 # so that your user is part of the "docker" group for all future opened terminals
 echo "Finished first time setup script"
