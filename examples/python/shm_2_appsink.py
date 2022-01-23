@@ -4,9 +4,10 @@ import cv2
 import gi
 import numpy as np
 
+import time
+
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
-
 
 class GstVideo():
     """shared memory (rgb) to Appsink example. run examples/bash/rtspsrc2shm.sh first
@@ -14,6 +15,8 @@ class GstVideo():
 
     def __init__(self, devnum=0):
         Gst.init(None)
+
+        self.new_frame_flag = False
 
         self.devnum = devnum
         self._frame = None
@@ -82,11 +85,12 @@ class GstVideo():
             buffer=buf.extract_dup(0, buf.get_size()), dtype=np.uint8)
         return array
 
-    def frame(self):
+    def get_frame(self):
         """ Get Frame
         Returns:
             iterable: bool and image frame, cap.read() output
         """
+        self.new_frame_flag = False
         return self._frame
 
     def frame_available(self):
@@ -94,7 +98,7 @@ class GstVideo():
         Returns:
             bool: true if frame is available
         """
-        return type(self._frame) != type(None)
+        return self.new_frame_flag and (type(self._frame) != type(None))
 
     def run(self, pipeline_list=None):
         """ Get frame to update _frame
@@ -117,14 +121,20 @@ class GstVideo():
         sample = sink.emit('pull-sample')
         new_frame = self.gst_to_opencv(sample)
         self._frame = new_frame
+        self.new_frame_flag = True
 
         return Gst.FlowReturn.OK
 
 
 if __name__ == '__main__':
     # Create the GstVideo object
-    # Add devnum= if is necessary to use a different one
+    # Add devnum= if is necessary to use a different one    
     video = GstVideo()
+
+    # fps measure init
+    last_sample_time = time.perf_counter()
+    FPS_measure_period_s = 4
+    FPS_measure_counter = 0
 
     while True:
         # Wait for the next frame
@@ -132,10 +142,19 @@ if __name__ == '__main__':
             continue
 
         # already converted by class from gst buffer to numpy array in callback
-        frame = video.frame()
+        frame = video.get_frame()
         
+        # fps period avg measurement over period
+        next_time = time.perf_counter()
+        FPS_measure_counter += 1
+        elapsed_time = next_time - last_sample_time
+        if elapsed_time > FPS_measure_period_s:
+          print(f'FPS: { FPS_measure_counter / elapsed_time}')
+          last_sample_time = next_time
+          FPS_measure_counter = 0
+
         ## do stuff here... example opencv show frame
-        print(frame.shape)
+        # print(frame.shape)
         # cv2.imshow('frame', frame)
         # if cv2.waitKey(1) & 0xFF == ord('q'):
         #     break

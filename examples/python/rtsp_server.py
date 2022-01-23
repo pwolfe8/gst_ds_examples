@@ -17,20 +17,19 @@ class MyFactory(GstRtspServer.RTSPMediaFactory):
     GstRtspServer.RTSPMediaFactory.__init__(self)
 
   def do_create_element(self, url):
-    # s_src = "rtspsrc location ! video/x-raw,rate=30,width=320,height=240 ! videoconvert ! video/x-raw,format=I420"
-    # s_h264 = "videoconvert ! vaapiencode_h264 bitrate=1000"
-    
-    # s_src = "videotestsrc ! video/x-raw,rate=30,width=320,height=240,format=I420"
-    # s_h264 = "x264enc tune=zerolatency"
-    
-    # pipeline_str = "( {s_src} ! queue max-size-buffers=1 name=q_enc ! {s_h264} ! rtph264pay name=pay0 pt=96 )".format(**locals())
 
-    src = "nvarguscamerasrc"
-    src_caps = "video/x-raw(memory:NVMM), format=NV12, width=1280, height=720, framerate=(fraction)60/1"
-    vid_encParsePacketize_h265 = "omxh265enc ! h265parse ! rtph265pay name=pay0 pt=96"
-    directH265Stream = f"{src} ! {src_caps} ! {vid_encParsePacketize_h265}"
+    testsrc = "videotestsrc ! video/x-raw,rate=30,width=320,height=240,format=I420"
+    rtspsrc = "rtspsrc location=rtsp://testuser:testpwd@10.160.41.21/live" \
+              " ! rtph264depay ! avdec_h264 ! videoconvert" \
+              " ! video/x-raw,format=I420,width=1920,height=1080,framerate=20/1"
+    h264 = "x264enc tune=zerolatency"
+    h264_hw = "omxh264enc insert-vui=1 ! h264parse ! rtph264pay name=pay0 pt=96"
+    h265_hw = "omxh265enc insert-vui=1 ! h265parse ! rtph265pay name=pay0 pt=96"
 
-    pipeline_str = f"( {directH265Stream} ) "
+    test_pipeline = f"{testsrc} ! {h264_hw}"
+    rtsp_pipeline = f"{rtspsrc} ! {h265_hw}"
+
+    pipeline_str = f"( {rtsp_pipeline} ) "
 
     if len(sys.argv) > 1:
       pipeline_str = " ".join(sys.argv[1:])
@@ -43,8 +42,18 @@ class GstServer():
     f = MyFactory()
     f.set_shared(True)
     m = self.server.get_mount_points()
-    m.add_factory("/test", f)
+    self.mountpoint="test"
+    m.add_factory(f'/{self.mountpoint}', f)
     self.server.attach(None)
+    
+    local_ip = self.get_ip_addr()
+    print(f'now serving at rtsp://{local_ip}:8554/{self.mountpoint}')
+
+  def get_ip_addr(self):
+    # may not work inside docker container
+    import socket
+    return socket.gethostbyname(socket.gethostname())
+
 
 if __name__ == '__main__':
   s = GstServer()

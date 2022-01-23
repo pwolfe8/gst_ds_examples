@@ -36,8 +36,17 @@ class GstServer():
     f = MyFactory()
     f.set_shared(True)
     m = self.server.get_mount_points()
-    m.add_factory("/rgb", f)
+    self.mountpoint="test"
+    m.add_factory(f'/{self.mountpoint}', f)
     self.server.attach(None)
+    
+    local_ip = self.get_ip_addr()
+    print(f'now serving at rtsp://{local_ip}:8554/{self.mountpoint}')
+
+  def get_ip_addr(self):
+    # may not work inside docker container
+    import socket
+    return socket.gethostbyname(socket.gethostname())
 
 if __name__ == '__main__':
   s = GstServer()
