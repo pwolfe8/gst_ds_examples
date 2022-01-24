@@ -14,6 +14,7 @@ service sysv_example start
 
 # start ssh service
 service ssh start
+chsh -s /bin/bash nvidia
 
 # run indefinitely until killed to keep container alive
 tail -F /dev/null 
