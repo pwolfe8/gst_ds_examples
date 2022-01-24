@@ -22,6 +22,12 @@ COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
 COPY helper_scripts/example_service.py /usr/local/bin/
 COPY helper_scripts/sysv_example /etc/init.d/sysv_example
 
+
+# ssh port change to 1022 & allow root login no pwd
+RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 1022 >> /etc/ssh/sshd_config
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+
 # install ip scanner & prereqs
 # RUN apt update && \
 #   apt install -y \
@@ -29,8 +35,12 @@ COPY helper_scripts/sysv_example /etc/init.d/sysv_example
 # RUN wget https://github.com/angryip/ipscan/releases/download/3.7.6/ipscan_3.7.6_all.deb && \
 #   gdebi -n ipscan_3.7.6_all.deb
 
-# setup non root user nvidia (password nvidia)
-# RUN apt install -y sudo && \
-#   useradd -m nvidia && echo "nvidia:nvidia" | chpasswd && adduser nvidia sudo
-# RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh 
+# setup non root user nvidia (password nvidia) for ssh access
+RUN apt install -y sudo && \
+  useradd -m nvidia && echo "nvidia:nvidia" | chpasswd && adduser nvidia sudo
+RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh 
+
+### uncomment USER command if you want default user to  be nvidia 
+### but wouldn't do that cuz then you have to type passwords into your starting script whenever you use sudo.
+### otherwise they wont work
 # USER nvidia
