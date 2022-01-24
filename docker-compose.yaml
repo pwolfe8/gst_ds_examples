@@ -10,7 +10,8 @@ services:
     container_name: ${CONTAINER_NAME}
 
     #### command to keep container alive ####
-    command: tail -F /dev/null 
+    # copied into /usr/local/bin on build
+    command: custom_starting_script.sh
 
     #### build Dockerfile and pass build args ####
     build:

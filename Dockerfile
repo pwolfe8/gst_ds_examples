@@ -15,7 +15,12 @@ ONBUILD RUN cd /opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/de
 
 # shared layers based off chosen starting point
 FROM build_${BUILD_ENV}
-RUN apt update && apt install -y graphviz
+RUN apt update && apt install -y graphviz curl
+
+# copy in custom starting script & service files
+COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
+COPY helper_scripts/example_service.py /usr/local/bin/
+COPY helper_scripts/sysv_example /etc/init.d/sysv_example
 
 # install ip scanner & prereqs
 # RUN apt update && \
