@@ -6,7 +6,7 @@ services:
   gstdocker_service:
 
     #### name image  & container ####
-    image: pwolfe854/${CONTAINER_NAME}:${ARCH}_nogpu
+    image: pwolfe854/${CONTAINER_NAME}:${ARCH}_gpu
     container_name: ${CONTAINER_NAME}
 
     #### command to keep container alive ####
@@ -32,7 +32,7 @@ services:
       
       ## development folder mappings here ##
       - ./examples:${WORKDIR}/gitfoldermap/examples # git folder map
-      - ./helper_scripts:${WORKDIR}/gitfoldermap/helper_scripts # git folder map
+      - ./sub_projects/deepstream_pose_estimation:${WORKDIR}/sources/apps/sample_apps/deepstream_pose_estimation
 
       ## device mappings ##
       - /dev/video0:/dev/video0 # for camera on video0 for example
@@ -52,8 +52,7 @@ services:
     network_mode: "host" # uses host network stack
     
     #### runtime libraries ####
-    # (like "nvidia" for docker gpu passthrough assuming nvidia-docker2 is installed on host)
-    # runtime: nvidia
+    runtime: nvidia
     
     #### container directory to start in ####
     working_dir: ${WORKDIR}
@@ -61,4 +60,4 @@ services:
 #### create volumes here ####
 # volumes:
 #   root:
-#   /opt/nvidia/deepstream/deepstream-6.0/samples/models/
+#   maybe this for .engine files? /opt/nvidia/deepstream/deepstream-6.0/samples/models/ 

@@ -10,3 +10,6 @@
 *.png
 *.dot
 *.pdf
+
+# sub git projects
+sub_projects
