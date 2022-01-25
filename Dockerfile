@@ -44,3 +44,11 @@ RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh
 ### but wouldn't do that cuz then you have to type passwords into your starting script whenever you use sudo.
 ### otherwise they wont work
 # USER nvidia
+
+COPY requirements.txt /home/nvidia/python_reqs/
+RUN  python3 -m pip install --upgrade pip && \
+  pip3 install setuptools 
+# USER nvidia 
+#   cd /home/nvidia/python_reqs && \
+#   pip3 install -r requirements.txt
+

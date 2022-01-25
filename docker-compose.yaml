@@ -34,6 +34,8 @@ services:
       ## development folder mappings here ##
       - ./examples:${WORKDIR}/gitfoldermap/examples # git folder map
       - ./helper_scripts:${WORKDIR}/gitfoldermap/helper_scripts # git folder map
+      - ./examples:/home/nvidia/examples
+      - ./helper_scripts:/home/nvidia/helper_scripts
 
       ## device mappings ##
       - /dev/video0:/dev/video0 # for camera on video0 for example
