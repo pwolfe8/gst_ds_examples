@@ -4,6 +4,9 @@
 echo "hello there starting script" > ~/test_start_script.txt
 
 
+# add stuff to path
+export PATH=/home/nvidia/.local/bin:$PATH
+
 # with nvidia user use sudo. with root take away sudo
 
 # and start service to write to that file as an exmaple sysv service

@@ -40,15 +40,15 @@ RUN apt install -y sudo && \
   useradd -m nvidia && echo "nvidia:nvidia" | chpasswd && adduser nvidia sudo
 RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh 
 
-### uncomment USER command if you want default user to  be nvidia 
-### but wouldn't do that cuz then you have to type passwords into your starting script whenever you use sudo.
-### otherwise they wont work
-# USER nvidia
 
+#### setup python environment ####
+# copy in reqs file
 COPY requirements.txt /home/nvidia/python_reqs/
+# upgrade pip install the right version of numpy to fix problems with matplotlib install
 RUN  python3 -m pip install --upgrade pip && \
-  pip3 install setuptools 
-# USER nvidia 
-#   cd /home/nvidia/python_reqs && \
-#   pip3 install -r requirements.txt
-
+  python3 -m pip install numpy==1.19.4 cython 
+# then do matplotlib install since it takes the longest
+RUN python3 -m pip install matplotlib==3.3.4
+# then install requirements file
+RUN cd /home/nvidia/python_reqs && \
+  python3 -m pip install -r requirements.txt
