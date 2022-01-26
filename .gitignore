@@ -13,3 +13,6 @@
 
 # sub git projects
 sub_projects
+
+# network discovery files
+local_network_out.txt
