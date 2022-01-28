@@ -62,7 +62,7 @@ if [ "$GPU_ARG" = "nvidia" ]; then
   
   # also clone any git repos to be mapped if you want
   if [ -z "$(ls -A sub_projects/deepstream_pose_estimation)" ]; then
-    git clone git@github.com:pwolfe8/deepstream_pose_estimation.git sub_projects/
+    git clone git@github.com:pwolfe8/deepstream_pose_estimation.git sub_projects/deepstream_pose_estimation
   else  
     echo "repo already cloned"
   fi
