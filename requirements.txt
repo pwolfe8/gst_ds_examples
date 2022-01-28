@@ -1,5 +1,3 @@
-cython
-numpy
-scipy
-matplotlib
 pandas
+regex
+scipy

@@ -11,7 +11,7 @@ services:
 
     #### command to keep container alive ####
     # copied into /usr/local/bin on build
-    command: custom_starting_script.sh
+    command: custom_starting_script.sh ${ENABLE_SSH}
 
     #### build Dockerfile and pass build args ####
     build:
@@ -20,6 +20,7 @@ services:
       args:
         FROM_IMG: ${FROM_IMG}
         BUILD_ENV: ${GPU_ARG}
+        ENABLE_SSH: ${ENABLE_SSH}
 
     #### volumes and mappings ####
     volumes:
@@ -34,6 +35,8 @@ services:
       ## development folder mappings here ##
       - ./examples:${WORKDIR}/gitfoldermap/examples # git folder map
       - ./sub_projects/deepstream_pose_estimation:${WORKDIR}/sources/apps/sample_apps/deepstream_pose_estimation
+      - ./examples:/home/nvidia/examples
+      - ./helper_scripts:/home/nvidia/helper_scripts
 
       ## device mappings ##
       - /dev/video0:/dev/video0 # for camera on video0 for example

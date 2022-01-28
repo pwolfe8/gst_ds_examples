@@ -11,7 +11,7 @@ services:
 
     #### command to keep container alive ####
     # copied into /usr/local/bin on build
-    command: custom_starting_script.sh
+    command: custom_starting_script.sh ${ENABLE_SSH}
 
     #### build Dockerfile and pass build args ####
     build:
@@ -20,6 +20,7 @@ services:
       args:
         FROM_IMG: ${FROM_IMG}
         BUILD_ENV: ${GPU_ARG}
+        ENABLE_SSH: ${ENABLE_SSH}
 
     #### volumes and mappings ####
     volumes:

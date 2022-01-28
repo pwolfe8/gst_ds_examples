@@ -3,7 +3,8 @@ CONTAINER_NAME=gst_ds_examples
 
 # input args
 ARCH_IN=${1:-}  # override arch to build
-NOCACHE=${2:-}  # build no cache
+ENABLE_SSH=${2:-false}
+NOCACHE=${3:-}  # build no cache
 
 # automatically determine situation if no arch specified
 if [ $# -eq "0" ]; then
@@ -80,6 +81,7 @@ echo ARCH=$ARCH >> .env
 echo GPU_ARG=$GPU_ARG >> .env
 echo WORKDIR=$WORKDIR >> .env
 echo FROM_IMG=$FROM_IMG >> .env
+echo ENABLE_SSH=$ENABLE_SSH >> .env
 
 # build with build args set
 echo "building Dockerfile for ${ARCH} with ${NOGPU}..."

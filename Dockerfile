@@ -23,11 +23,6 @@ COPY helper_scripts/example_service.py /usr/local/bin/
 COPY helper_scripts/sysv_example /etc/init.d/sysv_example
 
 
-# ssh port change to 1022 & allow root login no pwd
-RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 1022 >> /etc/ssh/sshd_config
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-
 # install ip scanner & prereqs
 # RUN apt update && \
 #   apt install -y \
@@ -35,20 +30,29 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 # RUN wget https://github.com/angryip/ipscan/releases/download/3.7.6/ipscan_3.7.6_all.deb && \
 #   gdebi -n ipscan_3.7.6_all.deb
 
-# setup non root user nvidia (password nvidia) for ssh access
+### setup custom python environment ####
+# copy in reqs file
+COPY requirements.txt /root/python_reqs/
+# upgrade pip install the right version of numpy to fix problems with matplotlib install
+RUN  python3 -m pip install --upgrade pip && \
+  python3 -m pip install numpy==1.19.4 cython 
+# then do matplotlib install since it takes the longest
+RUN python3 -m pip install matplotlib==3.3.4
+# then install requirements file
+RUN cd /root/python_reqs && \
+  python3 -m pip install -r requirements.txt
+
+# setup non root user nvidia (password nvidia) 
 RUN apt install -y sudo && \
   useradd -m nvidia && echo "nvidia:nvidia" | chpasswd && adduser nvidia sudo
-RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh 
 
-### uncomment USER command if you want default user to  be nvidia 
-### but wouldn't do that cuz then you have to type passwords into your starting script whenever you use sudo.
-### otherwise they wont work
-# USER nvidia
+# If allow SSH then perform these actions. (disabled by default)
+ARG ENABLE_SSH
+RUN if [ "$ENABLE_SSH" = true ]; then \
+  sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && \
+  echo Port 1022 >> /etc/ssh/sshd_config && \
+  mkdir -p /home/nvidia/.ssh && \
+  chown -R nvidia:nvidia /home/nvidia/.ssh; \
+  fi;
 
-COPY requirements.txt /home/nvidia/python_reqs/
-RUN  python3 -m pip install --upgrade pip && \
-  pip3 install setuptools 
-# USER nvidia 
-#   cd /home/nvidia/python_reqs && \
-#   pip3 install -r requirements.txt
 
