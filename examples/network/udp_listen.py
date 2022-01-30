@@ -8,7 +8,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         data = self.request[0].strip()
         socket = self.request[1]
-        print(f'{self.client_address} wrote {data} to {self.server.server_address}')
+        print(f'client {self.client_address}\n\twrote {data}\n\tto {self.server.server_address}')
 
         # send back message in uppercase as confirmation (comment out if not needed)
         socket.sendto(data.upper(), self.client_address)

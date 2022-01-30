@@ -1,15 +1,11 @@
-// cpp version of udp_send.c
+// Simple Cpp UDP Client
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-#include <string>
 #include <iostream>
 #include <sstream>
 
@@ -112,7 +108,7 @@ private:
     dest.sin_addr.s_addr = inet_addr(ip.c_str());
   }
 
-}; /* end UdpClient Class Definition */
+}; /* end UdpClient class definition */
 
 /**
  * main 
