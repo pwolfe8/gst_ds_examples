@@ -4,8 +4,6 @@
 import threading
 import socketserver
 
-
-
 class MyUDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         data = self.request[0].strip()
