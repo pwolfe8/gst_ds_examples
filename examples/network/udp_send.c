@@ -34,9 +34,9 @@ int main(int argc, char *argv[] ) {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
-    memset(&my_sock, 0, sizeof(my_sock));
-       
+    
     // Filling server information
+    memset(&my_sock, 0, sizeof(my_sock));
     my_sock.sin_family = AF_INET;
     my_sock.sin_port = htons(PORT);
     // my_sock.sin_addr.s_addr = INADDR_ANY; // bind to all interfaces (good for listening)
@@ -50,7 +50,8 @@ int main(int argc, char *argv[] ) {
     
     /* receive a confirmation msg from server if you choose */
     if (listen_for_return_msg) {
-        int n, len;
+        int n;
+        socklen_t len;
         n = recvfrom(sockfd, (char *)buffer, MAXLINE, 
                     MSG_WAITALL, (struct sockaddr *) &my_sock,
                     &len);
