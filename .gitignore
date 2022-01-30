@@ -16,3 +16,6 @@ sub_projects
 
 # network discovery files
 local_network_out.txt
+
+# C/C++ default output
+a.out

@@ -59,6 +59,9 @@ services:
     # (like "nvidia" for docker gpu passthrough assuming nvidia-docker2 is installed on host)
     # runtime: nvidia
     
+    #### uncomment to start container on boot ####
+    # restart: always
+
     #### container directory to start in ####
     working_dir: ${WORKDIR}
     
