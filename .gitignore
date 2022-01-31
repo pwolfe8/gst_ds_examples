@@ -2,6 +2,9 @@
 .env
 .containername
 
+# vscode files
+.vscode/
+
 # output media files
 *.mp4
 *.mkv
