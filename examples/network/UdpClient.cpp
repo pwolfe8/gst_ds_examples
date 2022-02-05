@@ -14,6 +14,7 @@ class UdpClient
 public:
   std::string dest_ip; /**< destination ip address */
   uint16_t dest_port;  /**< destination port number */
+  bool verbose;  /**< set on if you want debug prints */
 
   /**
    * default constructor 
@@ -27,6 +28,9 @@ public:
    */
   UdpClient(std::string ip, uint16_t port)
   {
+    // default verbose off
+    verbose = false;
+
     dest_ip = ip;
     dest_port = port;
 
@@ -58,8 +62,10 @@ public:
   void send(char *data)
   {
     // send message
+    if (verbose) {
     std::cout << "sending \"" << data << "\" to "
               << get_destination_str() << std::endl;
+    }
 
     sendto(sock_fd, (const char *)data, strlen(data),
            MSG_CONFIRM, (const struct sockaddr *)&dest, sizeof(dest));
@@ -80,7 +86,9 @@ public:
     n = recvfrom(sock_fd, (char *)recv_buff, recv_buff_len,
                  MSG_WAITALL, (struct sockaddr *)&dest, &len);
     recv_buff[n] = '\0';
-    std::cout << "Got return msg: " << recv_buff << std::endl;
+    if (verbose) {
+      std::cout << "Got return msg: " << recv_buff << std::endl;
+    }
   }
 
 private:
@@ -110,14 +118,14 @@ private:
 
 }; /* end UdpClient class definition */
 
-/**
- * main 
- */
-int main()
-{
-  UdpClient client("127.0.0.1", 8080);
-  client.send((char *)"hello there");
+// /**
+//  * main 
+//  */
+// int main()
+// {
+//   UdpClient client("127.0.0.1", 8080);
+//   client.send((char *)"hello there");
 
-  UdpClient client2("127.0.0.1", 8081);
-  client2.send_wait_return((char *)"send and wait for return");
-}
+//   UdpClient client2("127.0.0.1", 8081);
+//   client2.send_wait_return((char *)"send and wait for return");
+// }
