@@ -42,13 +42,12 @@ RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh
 
 
 #### setup python environment ####
-# copy in reqs file
-COPY requirements.txt /home/nvidia/python_reqs/
 # upgrade pip install the right version of numpy to fix problems with matplotlib install
 RUN  python3 -m pip install --upgrade pip && \
   python3 -m pip install numpy==1.19.4 cython 
 # then do matplotlib install since it takes the longest
 RUN python3 -m pip install matplotlib==3.3.4
-# then install requirements file
+# then copy in and install requirements file
+COPY requirements.txt /home/nvidia/python_reqs/
 RUN cd /home/nvidia/python_reqs && \
   python3 -m pip install -r requirements.txt

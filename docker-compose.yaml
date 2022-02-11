@@ -30,6 +30,8 @@ services:
       ## mappings ##
       - /tmp/.X11-unix/:/tmp/.X11-unix # x11
       - ~/.ssh:/root/.ssh:ro # ssh folder from linux host
+      - ~/.ssh:/home/nvidia/.ssh:ro # ssh folder from linux host nvidia user
+
       
       ## development folder mappings here ##
       - ./examples:${WORKDIR}/gitfoldermap/examples # git folder map
