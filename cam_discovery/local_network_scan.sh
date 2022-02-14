@@ -1,10 +1,13 @@
 #!/bin/bash
 SUBNET=$1
 if [ -z "$SUBNET" ]; then
-  echo "please specify subnet to scan as arg."
+  echo "please specify subnet to scan first argument of this command"
   echo "example: 192.168.0.1/24"
   echo "alternatively if you want to scan your default interface whole local network subnet run:"
   echo "sudo arp-scan -l"
+  echo "exiting now..."
+  echo ""
+  exit
 fi
 
 # install prereqs if needed
