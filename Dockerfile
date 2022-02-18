@@ -17,30 +17,6 @@ ONBUILD RUN cd /opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/de
 FROM build_${BUILD_ENV}
 RUN apt update && apt install -y graphviz curl
 
-# copy in custom starting script & service files
-COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
-COPY helper_scripts/example_service.py /usr/local/bin/
-COPY helper_scripts/sysv_example /etc/init.d/sysv_example
-
-
-# ssh port change to 1022 & allow root login no pwd
-RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 1022 >> /etc/ssh/sshd_config
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-
-# install ip scanner & prereqs
-# RUN apt update && \
-#   apt install -y \
-#   openjdk-8-jdk wget openjdk-8-jre gdebi
-# RUN wget https://github.com/angryip/ipscan/releases/download/3.7.6/ipscan_3.7.6_all.deb && \
-#   gdebi -n ipscan_3.7.6_all.deb
-
-# setup non root user nvidia (password nvidia) for ssh access
-RUN apt install -y sudo && \
-  useradd -m nvidia && echo "nvidia:nvidia" | chpasswd && adduser nvidia sudo
-RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh 
-
-
 #### setup python environment ####
 # upgrade pip install the right version of numpy to fix problems with matplotlib install
 RUN  python3 -m pip install --upgrade pip && \
@@ -51,3 +27,34 @@ RUN python3 -m pip install matplotlib==3.3.4
 COPY requirements.txt /home/nvidia/python_reqs/
 RUN cd /home/nvidia/python_reqs && \
   python3 -m pip install -r requirements.txt
+
+# setup non root user nvidia (password nvidia) for ssh access
+RUN apt install -y sudo && \
+  useradd -m nvidia && echo "nvidia:nvidia" | chpasswd && adduser nvidia sudo
+RUN mkdir -p /home/nvidia/.ssh && chown -R nvidia:nvidia /home/nvidia/.ssh
+
+# install ip scanner & prereqs
+# RUN apt update && \
+#   apt install -y \
+#   openjdk-8-jdk wget openjdk-8-jre gdebi
+# RUN wget https://github.com/angryip/ipscan/releases/download/3.7.6/ipscan_3.7.6_all.deb && \
+#   gdebi -n ipscan_3.7.6_all.deb
+
+########## NON INTERNET STUFF BELOW ############
+
+# ssh port change to 1022 & allow root login no pwd
+RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 1022 >> /etc/ssh/sshd_config
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# copy in custom starting script & service files
+COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
+
+# copy in example service
+# COPY helper_scripts/example_service.py /usr/local/bin/
+# COPY helper_scripts/sysv_example /etc/init.d/sysv_example
+
+# copy in gimbal main service 
+# COPY jetson /home/nvidia/jetson
+COPY helper_scripts/gimbal /etc/init.d/gimbal
+
+# COPY jetson/philip_test.sh /usr/local/bin/
