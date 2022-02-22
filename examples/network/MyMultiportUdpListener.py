@@ -4,13 +4,14 @@ import time
 import threading
 import socketserver
 
+
 class MyMultiportUdpListener:
     def __init__(self, portlist):
         self.portlist = portlist
         self.start_listeners()
 
     def start_udpserv(self, port):
-        self.MySinglePortListener(('127.0.0.1', port), self)
+        self.MySinglePortListener(('0.0.0.0', port), self)
 
     def start_listeners(self):
         # create threads to listen on each port

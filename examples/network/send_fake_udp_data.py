@@ -4,7 +4,9 @@ import numpy as np
 import struct
 
 verbose = False
-destination_ip_port = ('127.0.0.1', 6969)
+# destination_ip_port = ('192.168.0.2', 8080)
+# destination_ip_port = ('192.168.0.2', 6942)
+destination_ip_port = ('127.0.0.1', 6942)
 
 
 def send_message(msg_bytes):

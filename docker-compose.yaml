@@ -38,10 +38,12 @@ services:
 
     #### port mapping ####
     ports:
-      - target: 6969
-        published: 6969
-        protocol: udp
-        mode: host
+      - "127.0.0.1:6969:6969/udp"
+      - "127.0.0.1:6942:6942/udp"
+      # - target: 6969
+      #   published: 6969
+      #   protocol: udp
+      #   mode: host
 
     #### environmental variables to set inside the container ####
     # environment:
