@@ -3,7 +3,7 @@ services:
 
   ###### name service ######
   # (note: you can create multiple)
-  gstdocker_service:
+  gstdocker_service_master:
 
     #### name image  & container ####
     image: pwolfe854/${CONTAINER_NAME}:${ARCH}_nogpu

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-# rtsp server example
+# going to be an interpipe desktop rtsp stream test. work in progress
+
 import sys
 
 import gi
@@ -20,9 +21,6 @@ class MyFactory(GstRtspServer.RTSPMediaFactory):
 
     testsrc = "videotestsrc ! video/x-raw,rate=30,width=320,height=240,format=I420"
     dGPU_h264 = "nvvideoconvert ! nvv4l2h264enc ! h264parse ! rtph264pay name=pay0 pt=96"
-    jetson_h264 = "x264enc tune=zerolatency"
-    jetson_h264_hw = "omxh264enc insert-vui=1 ! h264parse ! rtph264pay name=pay0 pt=96"
-    jetson_h265_hw = "omxh265enc insert-vui=1 ! h265parse ! rtph265pay name=pay0 pt=96"
     test_pipeline = f"{testsrc} ! {dGPU_h264}"
 
     pipeline_str = f"( {test_pipeline} ) "

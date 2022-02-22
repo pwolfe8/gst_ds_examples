@@ -3,7 +3,7 @@ services:
 
   ###### name service ######
   # (note: you can create multiple)
-  gstdocker_service:
+  gstdocker_service_master:
 
     #### name image  & container ####
     image: pwolfe854/${CONTAINER_NAME}:${ARCH}_gpu
@@ -62,7 +62,8 @@ services:
     restart: always
 
     #### container directory to start in ####
-    working_dir: ${WORKDIR}/sources/apps/sample_apps/deepstream_pose_estimation
+    # working_dir: ${WORKDIR}/sources/apps/sample_apps/deepstream_pose_estimation
+    working_dir: ${WORKDIR}/gitfoldermap/examples/interpipe
     
 #### create volumes here ####
 # volumes:

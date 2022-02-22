@@ -1,5 +1,5 @@
 #!/bin/bash
-CONTAINER_NAME=gst_ds_examples
+CONTAINER_NAME=gst_ds_examples_master
 
 # input args
 ARCH_IN=${1:-}  # override arch to build
