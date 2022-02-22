@@ -11,7 +11,8 @@ services:
 
     #### command to keep container alive ####
     # copied into /usr/local/bin on build
-    command: custom_starting_script.sh ${ENABLE_SSH}
+    # command: custom_starting_script.sh ${ENABLE_SSH}
+    command: tail -F /dev/null
 
     #### build Dockerfile and pass build args ####
     build:
@@ -19,7 +20,6 @@ services:
       dockerfile: Dockerfile
       args:
         FROM_IMG: ${FROM_IMG}
-        BUILD_ENV: ${GPU_ARG}
         ENABLE_SSH: ${ENABLE_SSH}
 
     #### volumes and mappings ####
@@ -29,36 +29,25 @@ services:
       # - consider adding the .engine models here after conversion for saving time on launch
 
       ## mappings ##
-      - /tmp/.X11-unix/:/tmp/.X11-unix # x11
-      - ~/.ssh:/root/.ssh:ro # ssh folder from linux host
+      # - /tmp/.X11-unix/:/tmp/.X11-unix # x11
+      # - ~/.ssh:/root/.ssh:ro # ssh folder from host
       
       ## development folder mappings here ##
-      - ./examples:${WORKDIR}/gitfoldermap/examples # git folder map
-      - ./helper_scripts:${WORKDIR}/gitfoldermap/helper_scripts # git folder map
-      - ./examples:/home/nvidia/examples
-      - ./helper_scripts:/home/nvidia/helper_scripts
+      - ./examples:${WORKDIR}/examples
+      - ./helper_scripts:${WORKDIR}/helper_scripts
 
-      ## device mappings ##
-      - /dev/video0:/dev/video0 # for camera on video0 for example
-      - /tmp/argus_socket:/tmp/argus_socket # map the argus_socket for csi cameras using nvarguscamerasrc
+    #### port mapping ####
+    ports:
+      - target: 6969
+        published: 6969
+        protocol: udp
+        mode: host
 
     #### environmental variables to set inside the container ####
     # environment:
     #   - DISPLAY=$DISPLAY
     #   PATH_ADD: /opt/nvidia/deepstream/deepstream-6.0/bin # you can append this to bashrc using dockerfile
-      
-    
-    #### priveleged gains access to all devices on host ####
-    # good for running docker inside docker if you need. also owning devices like /dev/video0
-    privileged: true 
-
-    #### configure docker network mode ####
-    network_mode: "host" # uses host network stack
-    
-    #### runtime libraries ####
-    # (like "nvidia" for docker gpu passthrough assuming nvidia-docker2 is installed on host)
-    # runtime: nvidia
-    
+        
     #### uncomment to start container on boot ####
     # restart: always
 

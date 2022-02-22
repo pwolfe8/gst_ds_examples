@@ -1,26 +1,13 @@
 ARG FROM_IMG
-ARG BUILD_ENV=normal
+FROM ${FROM_IMG}
 
-#### non gpu normal build starting point ####
-FROM $FROM_IMG as build_normal
-ONBUILD RUN echo "normal build"
 
-#### nvidia build starting point ####
-FROM ${FROM_IMG} as build_nvidia
-ONBUILD RUN echo "nvidia build"
-# copy into (even though mapped later to host folder) so you can run make
-ONBUILD COPY sub_projects/deepstream_pose_estimation /opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/deepstream_pose_estimation
-ONBUILD RUN cd /opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/deepstream_pose_estimation &&\
-  make && make install
-
-# shared layers based off chosen starting point
-FROM build_${BUILD_ENV}
 RUN apt update && apt install -y graphviz curl
 
 # copy in custom starting script & service files
-COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
-COPY helper_scripts/example_service.py /usr/local/bin/
-COPY helper_scripts/sysv_example /etc/init.d/sysv_example
+# COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
+# COPY helper_scripts/example_service.py /usr/local/bin/
+# COPY helper_scripts/sysv_example /etc/init.d/sysv_example
 
 # install ip scanner & prereqs
 # RUN apt update && \
@@ -30,16 +17,14 @@ COPY helper_scripts/sysv_example /etc/init.d/sysv_example
 #   gdebi -n ipscan_3.7.6_all.deb
 
 ### setup custom python environment ####
-# # copy in reqs file
-# COPY requirements.txt /root/python_reqs/
-# # upgrade pip install the right version of numpy to fix problems with matplotlib install
-# RUN  python3 -m pip install --upgrade pip && \
-#   python3 -m pip install numpy==1.19.4 cython 
-# # then do matplotlib install since it takes the longest
-# RUN python3 -m pip install matplotlib==3.3.4
-# # then install requirements file
-# RUN cd /root/python_reqs && \
-#   python3 -m pip install -r requirements.txt
+RUN  python3 -m pip install --upgrade pip && \
+  python3 -m pip install numpy==1.19.4 cython 
+# then do matplotlib install since it takes the longest
+RUN python3 -m pip install matplotlib==3.3.4
+# then copy in and install requirements file
+COPY requirements.txt /home/nvidia/python_reqs/
+RUN cd /home/nvidia/python_reqs && \
+  python3 -m pip install -r requirements.txt
 
 # setup non root user nvidia (password nvidia). may need to run things some things with root still. (like pose)
 RUN apt install -y sudo && \
