@@ -16,6 +16,10 @@ ONBUILD RUN cd /opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/de
 # shared layers based off chosen starting point
 FROM build_${BUILD_ENV}
 RUN apt update && apt install -y graphviz curl
+#copy in debug tools
+COPY helper_scripts/dot2graph.sh /usr/local/bin/dot2graph
+COPY helper_scripts/gstGraph.sh /usr/local/bin/gstGraph
+
 
 # copy in custom starting script & service files
 COPY helper_scripts/custom_starting_script.sh /usr/local/bin/
