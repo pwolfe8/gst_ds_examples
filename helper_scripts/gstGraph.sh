@@ -15,7 +15,7 @@ mkdir -p $DEBUG_TEMP_DIR
 sleep 0.1
 
 echo "running command $GST_CMD"
-exit
+
 cd $PWD && GST_DEBUG=$DEBUG_LVL \
 GST_DEBUG_DUMP_DOT_DIR=$DEBUG_TEMP_DIR \
 ./$GST_CMD
