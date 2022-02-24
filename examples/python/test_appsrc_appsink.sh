@@ -6,7 +6,7 @@ INPUT_FPS=25
 INPUT_CAPS="video/x-raw,format=I420, width=$INPUT_W, height=$INPUT_H, framerate=$INPUT_FPS/1"
 RGB_CAPS="video/x-raw,format=RGB, width=$INPUT_W, height=$INPUT_H, framerate=$INPUT_FPS/1"
 RTSPURL="rtsp://admin:reolink@192.168.0.4//h264Preview_01_main"
-RTSPSRC="rtspsrc latency=1000 location=$RTSPURL ! application/x-rtp,media=video"
+RTSPSRC="rtspsrc latency=1000 location=$RTSPURL ! application/x-rtp,payload=96,encoding-name=H264"
 NVRTSPSRC="rtspsrc latency=1000 location=$RTSPURL ! application/x-rtp,media=video ! rtph264depay ! h264parse ! nvv4l2decoder"
 
 

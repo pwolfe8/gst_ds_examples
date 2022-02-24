@@ -57,3 +57,62 @@ RUN if [ "$ENABLE_SSH" = true ]; then \
   mkdir -p /home/nvidia/.ssh && \
   chown -R nvidia:nvidia /home/nvidia/.ssh; \
   fi;
+  
+# Install OpenCV and SkaiMOT dependencies
+RUN apt-get -y update && \
+    apt-get install -y --no-install-recommends \
+    wget unzip tzdata \
+    build-essential cmake pkg-config \
+    libgtk-3-dev libcanberra-gtk3-module \
+    libjpeg-dev libpng-dev libtiff-dev \
+    libavcodec-dev libavformat-dev libswscale-dev \
+    libv4l-dev libxvidcore-dev libx264-dev \
+    gfortran libatlas-base-dev \
+    python3-dev \
+    gstreamer1.0-tools \
+    libgstreamer1.0-dev \
+    libgstreamer-plugins-base1.0-dev \
+    gstreamer1.0-libav \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly \
+    libtbb2 libtbb-dev libdc1394-22-dev && \
+    pip3 install -U --no-cache-dir setuptools pip && \
+    pip3 install --no-cache-dir numpy==1.18.0
+
+# Build OpenCV
+ARG OPENCV_VERSION=4.1.1
+WORKDIR /root/
+RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip && \
+    unzip ${OPENCV_VERSION}.zip && rm ${OPENCV_VERSION}.zip && \
+    mv opencv-${OPENCV_VERSION} OpenCV && \
+    wget https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip && \
+    unzip ${OPENCV_VERSION}.zip && rm ${OPENCV_VERSION}.zip && \
+    mv opencv_contrib-${OPENCV_VERSION} OpenCV/opencv_contrib
+
+WORKDIR /root/OpenCV/build
+RUN cmake \
+    -DCMAKE_BUILD_TYPE=RELEASE \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DOPENCV_EXTRA_MODULES_PATH=${HOME}/OpenCV/opencv_contrib/modules \
+    -DINSTALL_PYTHON_EXAMPLES=ON \
+    -DINSTALL_C_EXAMPLES=OFF \
+    -DBUILD_opencv_python2=OFF \
+    -DBUILD_TESTS=OFF \
+    -DBUILD_PERF_TESTS=OFF \
+    -DBUILD_EXAMPLES=ON \
+    -DBUILD_PROTOBUF=OFF \
+    -DENABLE_FAST_MATH=ON \
+    -DWITH_TBB=ON \
+    -DWITH_LIBV4L=ON \
+    -DWITH_CUDA=OFF \
+    -DWITH_GSTREAMER=ON \
+    -DWITH_GSTREAMER_0_10=OFF \
+    -DWITH_FFMPEG=OFF .. && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig && \
+    rm -rf ${HOME}/OpenCV && \
+    rm -rf /var/lib/apt/lists/* 
+    # && \
+    # apt-get autoremove
