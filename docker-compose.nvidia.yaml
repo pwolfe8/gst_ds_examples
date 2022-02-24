@@ -63,7 +63,7 @@ services:
 
     #### container directory to start in ####
     # working_dir: ${WORKDIR}/sources/apps/sample_apps/deepstream_pose_estimation
-    working_dir: ${WORKDIR}/gitfoldermap/examples/bash/desktop
+    working_dir: ${WORKDIR}/gitfoldermap/examples/python
     
 #### create volumes here ####
 # volumes:
