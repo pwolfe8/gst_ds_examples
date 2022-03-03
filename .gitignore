@@ -16,3 +16,6 @@ sub_projects
 
 # network discovery files
 local_network_out.txt
+
+# backup images (upload it somewhere else like box or drive or something)
+*.tar.gz
