@@ -19,6 +19,8 @@ chsh -s /bin/bash nvidia
 # errors at /var/log/sysv_example.err
 
 # start main gimbal service
+# sleep before starting gimbal service
+sleep 15
 service gimbal start
 
 # run indefinitely until killed to keep container alive
