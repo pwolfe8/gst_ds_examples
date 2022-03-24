@@ -21,12 +21,12 @@ do
   valout=`cat $TEMPOUT | grep -c 'Freeing pipeline ...'`
   if [ "$valout" -eq "0" ]; then
     testresult="SUCCESS"
+    echo -e "$URL" >> $CLEAN_RESULTS
   else
     testresult="FAILURE"
   fi
   echo "Test Result: $testresult"
   echo -e "$URL\t$testresult" >> $RESULTSFILE
-  echo -e "$URL" >> $CLEAN_RESULTS
 
   # remove temp file from test_rtsp_url.sh
   rm $TEMPOUT

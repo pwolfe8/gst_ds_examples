@@ -10,6 +10,6 @@ sleep 0.1
 sudo GST_DEBUG=1 \
 GST_DEBUG_DUMP_DOT_DIR=$DEBUG_TEMP_DIR \
 gst-launch-1.0 -e rtspsrc location=$RTSP_URL latency=500 ! rtph264depay ! avdec_h264 ! x264enc ! matroskamux ! filesink location=test_record.mkv
-#gst-launch-1.0 -e rtspsrc location=$RTSP_URL latency=500 ! decodebin ! matroskamux ! filesink location=filename_h264.mkv
+# gst-launch-1.0 -e rtspsrc location=$RTSP_URL latency=500 ! decodebin ! matroskamux ! filesink location=filename_h264.mkv
 
-dot2graph $DEBUG_TEMP_DIR pdf
+dot2graph $DEBUG_TEMP_DIR p
