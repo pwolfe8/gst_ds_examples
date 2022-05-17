@@ -22,3 +22,6 @@ local_network_out.txt
 
 # C/C++ default output
 a.out
+
+# pyc
+*.pyc

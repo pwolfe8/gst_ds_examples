@@ -15,7 +15,12 @@ ONBUILD RUN cd /opt/nvidia/deepstream/deepstream-6.0/sources/apps/sample_apps/de
 
 # shared layers based off chosen starting point
 FROM build_${BUILD_ENV}
-RUN apt update && apt install -y graphviz curl
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub && \
+  apt update && apt install -y graphviz curl
+# RUN apt-key del 7fa2af80 && \
+#   wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb && \
+#   dpkg -i cuda-keyring_1.0-1_all.deb && \
+#   apt update && apt install -y graphviz curl
 #copy in debug tools
 COPY helper_scripts/dot2graph.sh /usr/local/bin/dot2graph
 COPY helper_scripts/gstGraph.sh /usr/local/bin/gstGraph
@@ -58,8 +63,12 @@ RUN if [ "$ENABLE_SSH" = true ]; then \
   chown -R nvidia:nvidia /home/nvidia/.ssh; \
   fi;
   
-# Install OpenCV and SkaiMOT dependencies
-RUN apt-get -y update && \
+# Install OpenCV and some other dependencies
+# RUN apt-key del 7fa2af80 && \
+#   wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/${ARCH}/cuda-keyring_1.0-1_all.deb && \
+#   dpkg -i cuda-keyring_1.0-1_all.deb && \
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub && \
+    apt-get -y update && \
     apt-get install -y --no-install-recommends \
     wget unzip tzdata \
     build-essential cmake pkg-config \
